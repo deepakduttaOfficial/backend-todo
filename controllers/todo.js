@@ -89,7 +89,10 @@ exports.getTodo = (req, res) => {
 // Get all Todos
 exports.getTodos = async (req, res) => {
   try {
-    const todos = await Todo.find({ user: req.auth._id });
+    const { sort } = req.query;
+    const todos = await Todo.find()
+      .where({ user: req.auth._id })
+      .sort({ createdAt: sort });
     return res.status(201).json({
       success: true,
       todos,
