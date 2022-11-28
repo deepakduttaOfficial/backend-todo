@@ -92,9 +92,10 @@ exports.getTask = (req, res) => {
 // Get all tasks Todo-wise
 exports.getTasksInsideTodo = async (req, res) => {
   try {
-    const { sort } = req.query;
+    const { sort, q } = req.query;
     // Task will send todo-wise
-    const tasks = await Task.find()
+    const search = q ? { task: new RegExp(q, "i") } : {};
+    const tasks = await Task.find(search)
       .where({ todo: req.todo._id })
       .sort({ createdAt: sort })
       .populate("todo", "todo")
